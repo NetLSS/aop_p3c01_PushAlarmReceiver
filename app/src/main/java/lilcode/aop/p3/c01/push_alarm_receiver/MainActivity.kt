@@ -3,6 +3,7 @@ package lilcode.aop.p3.c01.push_alarm_receiver
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
+import com.google.firebase.messaging.FirebaseMessaging
 
 /*
 cf.
@@ -34,5 +35,17 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        initFirebase()
+    }
+
+    private fun initFirebase() {
+        FirebaseMessaging.getInstance().token
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) { // 성공 시
+                    firebaseTokenTextView.text = task.result // 토큰 가져오기
+                }
+
+            }
     }
 }
