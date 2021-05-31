@@ -16,6 +16,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service android:name=".MyFirebaseMessagingService"
+            android:exported="false">
+            <!--            해당 인텐트를 수신 하겠다.-->
+            <intent-filter android:name="com.google.firebase.MESSAGING_EVENT" />
+        </service>
     </application>
 
 </manifest>
