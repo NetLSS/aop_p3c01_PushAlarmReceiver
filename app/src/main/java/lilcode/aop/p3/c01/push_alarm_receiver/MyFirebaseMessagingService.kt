@@ -3,7 +3,10 @@ package lilcode.aop.p3.c01.push_alarm_receiver
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
@@ -27,6 +30,14 @@ https://developer.android.com/training/notify-user/channels
 - 중요도 설정 필요
 
 [확장형 알림 만들기](https://developer.android.com/training/notify-user/expanded)
+
+
+ addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP) //
+ 원래 Standard는 스택에 쌓듯이 A인텐트 에다 B 실행시 B 인테트를 쌓고 (가장 위에가 보이는 것)
+ FLAG_ACTIVITY_SINGLE_TOP는 같은 인텐트가 오면 원래 있었던 것을 보여줌 onNewintent
+ (https://developer.android.com/guide/components/activities/tasks-and-back-stack)
+
+ PendingIntent : 내가 직접 다루는 인텐트가 아닌 누군가 한테 인텐트를 다룰 수 있는 권한을 주는 것
  */
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -64,12 +75,25 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         title: String?,
         message: String?
     ): Notification {
+
+        val intent = Intent(this, MainActivity::class.java).apply {
+            putExtra("notificationType","${type.title} 타입")
+            addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        }
+
+        val pendingIntent = PendingIntent.getActivity(this, type.id, intent, FLAG_UPDATE_CURRENT)
+        // type.id 를 통해 각 타입별로 받아올 수 있도록
+        // FLAG_UPDATE_CURRENT 각각의 알림에서는 팬딩인텐트가 동일 하도록
+
+
         // 실제 알림 컨텐츠 만들기
         val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)// 아이콘 보여주기
             .setContentTitle(title) // 메세지 에서 받은 타이틀 활용
             .setContentText(message) // 메세지 에서 받은 메세지 활용
             .setPriority(NotificationCompat.PRIORITY_DEFAULT) // 오레오 이하 버전 에서는 지정 필요
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true) // 알림 클릭시 자동 제거
 
         when (type) {
             NotificationType.NORMAL -> Unit
