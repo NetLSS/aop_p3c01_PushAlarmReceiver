@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity() {
         updateResult(true)
     }
 
+    // firebase 토큰을 가져오는 부분
     private fun initFirebase() {
         FirebaseMessaging.getInstance().token
             .addOnCompleteListener { task ->
