@@ -1,5 +1,7 @@
 # aop-part3-chapter01
 
+보다 더 자세한 내용은 저의 [블로그 포스터](https://whyprogrammer.tistory.com/586)를 통해 확인할 수 있습니다.
+
 ## ⚠️ 주의사항
 [Firebase 프로젝트](https://console.firebase.google.com/u/0/) 에서 다운받은 `google-services.json` 파일을 추가해야합니다.
 
